@@ -1,7 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
 using System.Threading.Tasks;
 using FaceReplace.ITOps.File;
 using Microsoft.WindowsAzure.Storage.Blob;
@@ -76,6 +76,15 @@ namespace FaceReplace.ITOps
             var blobIndex = new Random().Next(0, blobs.Count - 1);
 
             var blob = blobs[blobIndex];
+            await blob.DownloadToStreamAsync(outputStream);
+
+            return blob.Name.Split('/').Last();
+        }
+
+        public async Task<string> DownloadAtIndexPosition(int indexPosition, Stream outputStream)
+        {
+            var blobs = directory.ListBlobs(useFlatBlobListing: true).Cast<CloudBlockBlob>().ToList();
+            var blob = blobs[indexPosition];
             await blob.DownloadToStreamAsync(outputStream);
 
             return blob.Name.Split('/').Last();

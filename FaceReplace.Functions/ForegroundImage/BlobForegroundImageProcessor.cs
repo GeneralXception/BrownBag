@@ -15,7 +15,7 @@ namespace FaceReplace.Functions.ForegroundImage
     public static class BlobForegroundImageProcessor
     {
         [FunctionName("BlobForegroundImageProcessor")]        
-        public static async Task Run([BlobTrigger(Shared.BlobContainerName + "/" + Shared.ForegroundUnprocessedImageBlobDirectoryName + "/{name}", Connection = "StorageConnectionString")]Stream myBlob, string name, TraceWriter log)
+        public  static async Task Run([BlobTrigger(Shared.BlobContainerName + "/" + Shared.ForegroundUnprocessedImageBlobDirectoryName + "/{name}", Connection = "StorageConnectionString")]Stream myBlob, string name, TraceWriter log)
         {
             var storageConnectionString = ConfigurationManager.AppSettings["StorageConnectionString"];
             var storageAccount = CloudStorageAccount.Parse(storageConnectionString);

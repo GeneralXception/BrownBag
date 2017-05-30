@@ -37,7 +37,9 @@ namespace FaceReplace.Functions.ForegroundImage
 
                 var filesUploaded = await PerformUpload(req, uploader);
 
-                return req.CreateResponse(HttpStatusCode.OK, filesUploaded);
+                var httpResponseMessage = req.CreateResponse(HttpStatusCode.OK, filesUploaded);
+                httpResponseMessage.Headers.Add("Access-Control-Allow-Origin", "*");
+                return httpResponseMessage;
             }
             catch (Exception exception)
             {
@@ -57,10 +59,25 @@ namespace FaceReplace.Functions.ForegroundImage
             }
 
             var memoryStream = await CopyToMemoryStream(fileContentStream);
-            var filePath = new FileName(fileContentStream.Headers.ContentDisposition.FileName);
+            var filePath = new FileName(GetFileNameOnly(fileContentStream.Headers.ContentDisposition.FileName));
             var uploadResult = await uploader.Upload(memoryStream, filePath);
 
             return uploadResult;
+        }
+
+        private static string GetFileNameOnly(string path)
+        {
+            if (path.Contains('\\'))
+            {
+                return path.Split('\\').Last();
+            }
+
+            if (path.Contains('/'))
+            {
+                return path.Split('/').Last();
+            }
+
+            return path;
         }
 
         private static async Task<MemoryStream> CopyToMemoryStream(HttpContent content)

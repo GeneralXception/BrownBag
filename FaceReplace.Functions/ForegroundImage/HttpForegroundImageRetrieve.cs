@@ -33,7 +33,9 @@ namespace FaceReplace.Functions.ForegroundImage
 
                 if (!exists)
                 {
-                    return req.CreateResponse(HttpStatusCode.NotFound);
+                    var httpResponseMessage = req.CreateResponse(HttpStatusCode.NotFound);
+                    httpResponseMessage.Headers.Add("Access-Control-Allow-Origin", "*");
+                    return httpResponseMessage;
                 }
 
                 var stream = new MemoryStream();
@@ -43,10 +45,12 @@ namespace FaceReplace.Functions.ForegroundImage
 
                 response.Content = new StreamContent(stream);
 
-                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("inline")
                 {
                     FileName = fileName
                 };
+
+                response.Headers.Add("Access-Control-Allow-Origin", "*");
 
                 return response;
             }
