@@ -73,7 +73,7 @@ namespace FaceReplace.ITOps
         public async Task<string> RandomDownload(Stream outputStream)
         {
             var blobs = directory.ListBlobs(useFlatBlobListing: true).Cast<CloudBlockBlob>().ToList();
-            var blobIndex = new Random().Next(0, blobs.Count - 1);
+            var blobIndex = new Random().Next(blobs.Count);
 
             var blob = blobs[blobIndex];
             await blob.DownloadToStreamAsync(outputStream);

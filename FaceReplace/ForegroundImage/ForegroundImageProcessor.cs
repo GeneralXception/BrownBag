@@ -89,7 +89,7 @@ namespace FaceReplace.ForegroundImage
 
         private FaceResult RandomFaceResult(List<FaceResult> faceData)
         {
-            var index = new Random().Next(0, faceData.Count-1);
+            var index = new Random().Next(faceData.Count);
             return faceData[index];
         }
 
